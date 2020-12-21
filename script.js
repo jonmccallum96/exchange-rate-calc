@@ -15,9 +15,19 @@ function calculate() {
   fetch(`https://api.exchangeratesapi.io/latest?base=${currency1}`)
     .then(res => res.json())
     .then(data => {
-      console.log(data);
+      const rate = data.rates[currency2];
+      rateEl.innerText = `1 ${currency1} = ${rate} ${currency2}`;
+      amountEl2.value = (amountEl1.value * rate).toFixed(2);
     });
 
+}
+
+//SWAP CURRENCY
+function swapCurrency() {
+  const hold = currencyEl1.value;
+  currencyEl1.value = currencyEl2.value;
+  currencyEl2.value = hold;
+  calculate()
 }
 
 //EVENT LISTENERS
@@ -26,5 +36,6 @@ currencyEl1.addEventListener('change', calculate);
 amountEl1.addEventListener('input', calculate);
 currencyEl2.addEventListener('change', calculate);
 amountEl2.addEventListener('input', calculate);
+swapEl.addEventListener('click', swapCurrency)
 
 calculate();
